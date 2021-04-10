@@ -2,6 +2,7 @@
 
 library(shiny)
 library(shinydashboard)
+library(dashboardthemes)
 
 dashboardPage(
   dashboardHeader(
@@ -22,6 +23,12 @@ dashboardPage(
     )
   ),
   dashboardBody(
+    
+    ### changing theme
+    shinyDashboardThemes(
+      theme = "poor_mans_flatly"
+    ),
+    
     tabItems(
       tabItem(
         tabName = "background",

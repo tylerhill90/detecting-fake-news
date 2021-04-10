@@ -2,3 +2,5 @@
 papers/
 data/
 ConceptSketches/
+.RData
+.Rhistory

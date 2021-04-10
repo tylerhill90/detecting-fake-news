@@ -1,0 +1,59 @@
+---
+title: "Wrangle Model Data"
+author: "Tyler Hill"
+date: "4/9/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=F, warning=F}
+# Load libraries
+library(tidyverse)
+```
+
+***
+
+## Load, inspect, and clean the data from the tutorial
+
+```{r}
+# Data from https://data-flair.training/blogs/advanced-python-project-detecting-fake-news/
+news_data <- read.csv("./data/data-flair/news.csv")
+# View(news_data)
+head(news_data)
+
+# Drop the X column
+news_data <- news_data %>% select(!X)
+```
+
+## Load, inspect, clean, and merge the data from the ISOT data set with the tutorial data
+
+```{r}
+# Data from https://www.uvic.ca/engineering/ece/isot/datasets/fake-news/index.php
+# Fake news
+isot_fake_data <- read.csv("./data/ISOT-data/Fake.csv")
+# View(isot_fake_data)
+isot_fake_data <- isot_fake_data %>% 
+  select(!c(subject, date)) %>% 
+  mutate(label = "FAKE")
+
+# True news
+isot_true_data <- read.csv("./data/ISOT-data/True.csv")
+# View(isot_true_data)
+isot_true_data <- isot_true_data %>% 
+  select(!c(subject, date)) %>% 
+  mutate(label = "REAL")
+
+isot <- bind_rows(isot_fake_data, isot_true_data)
+```
+
+## Merge the two data sets, save, and clear workspace
+
+```{r}
+data <- bind_rows(news_data, isot)
+write.csv(data, "./data/data.csv")
+rm(list = ls())
+```
+
