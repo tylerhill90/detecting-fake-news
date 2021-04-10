@@ -24,6 +24,8 @@ dashboardPage(
   ),
   dashboardBody(
     
+    useShinyjs(),
+    
     ### changing theme
     shinyDashboardThemes(
       theme = "poor_mans_flatly"
@@ -57,7 +59,19 @@ dashboardPage(
       tabItem(
         tabName = "model-detect",
         fluidRow(
-          "Model Detect"
+          box(
+            textAreaInput(
+              "article_text",
+              label = h3("Input Article to Detect Here"),
+              placeholder = "Enter the article's body text here",
+              height = "300px"
+            ),
+            actionButton("run_model", "Detect Fake News", icon = icon("fingerprint")),
+            helpText("Usage:", tags$br(), "Copy and paste the article you would like to detect
+            in the text box above. Use ctrl + shift + v to paste only unformatted text. Please 
+            enter just the article's body for the best results. Press the Detect Fake News button
+            after entering the body text to run the model and see your results.")
+          )
         )
       )
     )

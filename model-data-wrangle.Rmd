@@ -22,10 +22,9 @@ library(tidyverse)
 # Data from https://data-flair.training/blogs/advanced-python-project-detecting-fake-news/
 news_data <- read.csv("./data/data-flair/news.csv")
 # View(news_data)
-head(news_data)
 
 # Drop the X column
-news_data <- news_data %>% select(!X)
+news_data <- news_data %>% select(!c(X, title))
 ```
 
 ## Load, inspect, clean, and merge the data from the ISOT data set with the tutorial data
@@ -36,14 +35,14 @@ news_data <- news_data %>% select(!X)
 isot_fake_data <- read.csv("./data/ISOT-data/Fake.csv")
 # View(isot_fake_data)
 isot_fake_data <- isot_fake_data %>% 
-  select(!c(subject, date)) %>% 
+  select(!c(title, subject, date)) %>% 
   mutate(label = "FAKE")
 
 # True news
 isot_true_data <- read.csv("./data/ISOT-data/True.csv")
 # View(isot_true_data)
 isot_true_data <- isot_true_data %>% 
-  select(!c(subject, date)) %>% 
+  select(!c(title, subject, date)) %>% 
   mutate(label = "REAL")
 
 isot <- bind_rows(isot_fake_data, isot_true_data)
@@ -53,7 +52,8 @@ isot <- bind_rows(isot_fake_data, isot_true_data)
 
 ```{r}
 data <- bind_rows(news_data, isot)
-write.csv(data, "./data/data.csv")
+# View(data)
+write.csv(data, "./data/data.csv", row.names = FALSE)
 rm(list = ls())
 ```
 
