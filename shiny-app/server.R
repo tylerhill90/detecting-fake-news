@@ -5,10 +5,15 @@ library(shinyjs)
 library(tidyverse)
 library(highcharter)
 library(tm)
+library(SnowballC)
 library(reticulate)
 
 # Python resources
-use_virtualenv('/home/tyler/School/INSH5302/FreeProj/env', required = TRUE)
+virtualenv_create(envname = "python_environment", python= "python3")
+virtualenv_install("python_environment", packages = c(
+  "joblib", "pandas", "numpy", "python-dateutil", "pytz", "scikit-learn", "scipy", "six", "sklearn", "threadpoolctl"
+))
+reticulate::use_virtualenv("python_environment", required = TRUE)
 source_python("./predict.py")
 
 function(input, output) {
@@ -60,8 +65,6 @@ function(input, output) {
     text_corp <- tm_map(text_corp, removeNumbers)
     text_corp <- tm_map(text_corp, removeWords, stopwords("english"))
     text_corp <- tm_map(text_corp, removePunctuation)
-    # Custom stopwords (erie is the name of a mountain I climb at)
-    text_corp <- tm_map(text_corp, removeWords, c("erie")) 
     # Strip whitespace
     text_corp <- tm_map(text_corp, stripWhitespace)
     # Perform word stemming
@@ -84,6 +87,6 @@ function(input, output) {
         ),
         name = "Word Count"
       ) %>% 
-      hc_title(text = "Word Cloud from Article")
+      hc_title(text = "Article Word Cloud")
   })))
 }

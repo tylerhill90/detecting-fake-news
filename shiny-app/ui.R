@@ -6,6 +6,7 @@ library(tidyverse)
 library(shinydashboard)
 library(dashboardthemes)
 library(tm)
+library(SnowballC)
 library(highcharter)
 
 dashboardPage(

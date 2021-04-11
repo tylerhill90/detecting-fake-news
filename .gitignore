@@ -5,3 +5,5 @@ ConceptSketches/
 .RData
 .Rhistory
 *.csv
+*.dcf
+
