@@ -139,6 +139,7 @@ dashboardPage(
               height = "250px"
             ),
             actionButton("run_model", "Detect Fake News", icon = icon("fingerprint")),
+            tags$br(),
             helpText("Usage:", tags$br(), "Copy and paste the article you would like to detect
             in the text box above. Use ctrl + shift + v to paste only unformatted text. Please 
             enter just the article's body for the best results. Press the Detect Fake News button
@@ -146,7 +147,7 @@ dashboardPage(
             p(
               tags$strong("Resources for reliable articles:"), tags$br(),
               tags$a(href = "https://www.npr.org/sections/politics/", "NPR - Politics"), tags$br(),
-              tags$a(href = "https://www.bbc.com/news/topics/cwnpxwzd269t/us-politics", "BBC - US Politics"), tags$br()
+              tags$a(href = "https://www.politico.com/news/politics", "Politico - Politics"), tags$br()
             ),
             p(
               tags$strong("Resources for controversial/biased articles:"), tags$br(),

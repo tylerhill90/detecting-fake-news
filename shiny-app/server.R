@@ -10,10 +10,9 @@ library(reticulate)
 
 # Python resources
 virtualenv_create(envname = "python_environment", python= "python3")
-virtualenv_install("python_environment", packages = c(
-  "joblib", "pandas", "numpy", "python-dateutil", "pytz", "scikit-learn", "scipy", "six", "sklearn", "threadpoolctl"
-))
+virtualenv_install("python_environment", packages = c("pandas", "numpy", "sklearn"))
 reticulate::use_virtualenv("python_environment", required = TRUE)
+pandas <- import("pandas")
 source_python("./predict.py")
 
 function(input, output) {
