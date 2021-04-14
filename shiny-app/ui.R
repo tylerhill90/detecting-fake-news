@@ -1,13 +1,7 @@
 # Shiny app user interface
 
-library(shiny)
-library(shinyjs)
-library(tidyverse)
-library(shinydashboard)
-library(dashboardthemes)
-library(tm)
-library(SnowballC)
-library(highcharter)
+# Load libraries and helper functions
+source("helpers.R")
 
 dashboardPage(
   dashboardHeader(

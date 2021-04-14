@@ -48,12 +48,70 @@ isot_true_data <- isot_true_data %>%
 isot <- bind_rows(isot_fake_data, isot_true_data)
 ```
 
-## Merge the two data sets, save, and clear workspace
+## Load fake news data sets from kaggle
 
 ```{r}
+# Data from https://www.kaggle.com/c/fakenewskdd2020
+kag_2020 <- read.csv("./data/kaggle-fakenewskdd2020/train.csv", sep = "\t", quote = "")
+# View(kag_2020)
+
+# Drop rows where text is too short
+kag_2020 <- kag_2020 %>%
+  mutate(label = ifelse(label == 0, "REAL", "FAKE"))
+```
+
+```{r}
+# Data from https://www.kaggle.com/c/fake-news
+kag_2018 <- read.csv("./data/kaggle-fake-news/train.csv")
+# View(kag_2018)
+
+# Drop rows where text is too short
+kag_2018 <- kag_2018 %>%
+  select(text, label) %>% 
+  mutate(label = ifelse(label == 0, "REAL", "FAKE"))
+```
+
+```{r}
+# Data from https://www.kaggle.com/c/classifying-the-fake-news
+kag_2017 <- read.csv("./data/kaggle-classify/training.csv")
+# View(kag_2017)
+
+# Drop rows where text is too short
+kag_2017 <- kag_2017 %>%
+  select(text, label) %>% 
+  mutate(label = ifelse(label == 0, "REAL", "FAKE"))
+```
+
+## Merge the data sets and clean them
+
+```{r}
+# Merge
 data <- bind_rows(news_data, isot)
+data <- bind_rows(data, kag_2020)
+data <- bind_rows(data, kag_2018)
+data <- bind_rows(data, kag_2017)
 # View(data)
+
+# Clean
+data <- data %>% 
+  mutate(
+    text = ifelse(
+      lengths(strsplit(text, " ")) < 50,
+      NA,
+      text
+    )
+  ) %>% 
+  drop_na() %>% 
+  unique()
+```
+
+## Save to a single file
+
+```{r}
 write.csv(data, "./data/data.csv", row.names = FALSE)
-rm(list = ls())
+```
+
+```{r}
+#rm(list = ls())
 ```
 

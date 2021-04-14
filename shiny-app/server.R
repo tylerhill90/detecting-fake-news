@@ -1,24 +1,32 @@
 # Shiny app server
 
-library(shiny)
-library(shinyjs)
-library(tidyverse)
-library(highcharter)
-library(tm)
-library(SnowballC)
-library(reticulate)
+# Load libraries and helper functions
+source("helpers.R")
 
 # Python resources
 virtualenv_create(envname = "python_environment", python= "python3")
 virtualenv_install("python_environment", packages = c("pandas", "numpy", "sklearn"))
 reticulate::use_virtualenv("python_environment", required = TRUE)
-pandas <- import("pandas")
 source_python("./predict.py")
 
 function(input, output) {
+  ################
+  ## BACKGROUND ##
+  ################
   
+  ###########
+  ## STATS ##
+  ###########
+  
+  ###########
+  ## MODEL ##
+  ###########
   observe({
-    if(is.null(input$article_text) || input$article_text == "") {
+    dm_df <- process_text(input$article_text)
+    if(
+      is.null(input$article_text) ||  # Check for empty cell
+      is.null(dm_df$word)  # Check for only stop words and/or whitespace entered
+    ) {
       disable("run_model")
     }
     else {
@@ -53,27 +61,8 @@ function(input, output) {
     get_results()
     article <- read.csv("article.csv")
     text <- article[1,1]
-    # Remove emojis, hashtags, and usernames
-    text <- gsub("[^[:ascii:]]|#[^\\s]*|@[^\\s]*", "", text, perl=T)
-    # Create Corpus object
-    text_corp <- Corpus(VectorSource(text))
     
-    # COnvert to lowercase
-    text_corp <- tm_map(text_corp, content_transformer(tolower))
-    # Remove numbers, stopwords, and punctuation
-    text_corp <- tm_map(text_corp, removeNumbers)
-    text_corp <- tm_map(text_corp, removeWords, stopwords("english"))
-    text_corp <- tm_map(text_corp, removePunctuation)
-    # Strip whitespace
-    text_corp <- tm_map(text_corp, stripWhitespace)
-    # Perform word stemming
-    text_corp <- tm_map(text_corp, stemDocument)
-    # Build Document Matrix
-    text_dm <- TermDocumentMatrix(text_corp)
-    dm <- as.matrix(text_dm)
-    # Sort by descending value
-    dm_v <- sort(rowSums(dm),decreasing=TRUE)
-    dm_df <- data.frame(word = names(dm_v),freq=dm_v)
+    dm_df <- process_text(text)  # From helpers.R
     
     # Show only the top 20 words
     dm_df %>% 
