@@ -3,6 +3,9 @@
 # Load libraries and helper functions
 source("helpers.R")
 
+# Set highcharter options
+options(highcharter.theme = hc_theme_smpl(tooltip = list(valueDecimals = 2)))
+
 # Python resources
 virtualenv_create(envname = "python_environment", python= "python3")
 virtualenv_install("python_environment", packages = c("pandas", "numpy", "sklearn"))
@@ -17,6 +20,71 @@ function(input, output) {
   ###########
   ## STATS ##
   ###########
+  
+  ## Google Trends Chart ##
+  observe({
+    if(
+      is.null(input$gtrends_query) || str_trim(input$gtrends_query) == ""
+    ) {
+      disable("gtrends_search")
+    }
+    else {
+      enable("gtrends_search")
+    }
+  })
+  
+  get_gtrends_data <- eventReactive(input$gtrends_search, {
+    # Query Google Trends
+    chart_df <- gtrends(
+      keyword = input$gtrends_query,
+      time = "all",
+      gprop = "web"
+    )
+    
+    # Clean data
+    chart_df <- chart_df$interest_over_time %>%
+      select(date, hits)
+    chart_df <<- xts(chart_df[-1], order.by = chart_df$date)
+    
+    title_ <<- paste('Google Trends Results: "', input$gtrends_query, '"', sep = '')
+  })
+  
+  output$google_trends <- renderHighchart((({
+    get_gtrends_data()
+    
+    hchart(chart_df) %>% 
+      hc_title(text = title_)
+  })))
+  
+  ## World Map - Gov Influence ##
+  output$world_govs <- renderHighchart((({
+    chart_df <- df_govs %>% 
+      filter(year == input$world_map_year) %>% 
+      select(country_name, input$world_map_var)
+    
+    if (input$world_map_var == "v2mecenefm_mean") {subtitle <- "Government media censorship"}
+    if (input$world_map_var == "v2smgovdom_mean") {subtitle <- "Government dissemination of false information domestic"}
+    if (input$world_map_var == "v2smgovab_mean") {subtitle <- "Government dissemination of false information abroad"}
+    if (input$world_map_var == "v2smpardom_mean") {subtitle <- "Party dissemination of false information domestic"}
+    if (input$world_map_var == "v2smparab_mean") {subtitle <- "Party dissemination of false information abroad"}
+    if (input$world_map_var == "v2smfordom_mean") {subtitle <- "Foreign governments dissemination of false information"}
+    
+    subtitle <- paste(subtitle, "in", input$world_map_year)
+    
+    highchart(type = "map") %>% 
+      hc_add_series_map(
+        worldgeojson,
+        chart_df,
+        value = input$world_map_var,
+        joinBy = c("name", "country_name"),
+        name = "Index Score"
+      ) %>% 
+      hc_colorAxis(
+        stops = color_stops()
+      ) %>% 
+      hc_mapNavigation(enabled = TRUE) %>% 
+      hc_title(text = subtitle)
+  })))
   
   ###########
   ## MODEL ##
@@ -42,8 +110,6 @@ function(input, output) {
     probs_df <- data.frame(label = c("Fake", "Real"),
                            prob = c(as.numeric(results[2]), 
                                     as.numeric(results[3])))
-    assign("prediction", prediction, envir = .GlobalEnv)
-    assign("probs_df", probs_df, envir = .GlobalEnv)
   })
   
   output$results_pie <- renderHighchart(({
