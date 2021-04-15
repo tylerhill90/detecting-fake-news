@@ -106,8 +106,8 @@ function(input, output) {
     df <- data.frame(text = input$article_text)
     write.csv(df, "article.csv", row.names = FALSE)
     results <- predict_results()
-    prediction <- results[1]
-    probs_df <- data.frame(label = c("Fake", "Real"),
+    prediction <<- results[1]
+    probs_df <<- data.frame(label = c("Fake", "Real"),
                            prob = c(as.numeric(results[2]), 
                                     as.numeric(results[3])))
   })

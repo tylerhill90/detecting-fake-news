@@ -87,11 +87,11 @@ dashboardPage(
               tags$br(), 
               p("Please enter a Google Trends query below to see it's relative popularity over time.")
             ),
-            textInput("gtrends_query", "", placeholder = "Enter query here"),
+            textInput("gtrends_query", "", placeholder = 'Enter query here e.g. "fake news"'),
             actionButton("gtrends_search", "Search Google Trends", icon = icon("search")),
             tags$br(), tags$br(), 
             p("Google Trends is... TODO"),
-            p("Some search ideas are... TODO")
+            p('Some search ideas are "fake news", "misinformation", "conspiracy theory", "pizzagate", "Qanon"')
           )
           
         )
