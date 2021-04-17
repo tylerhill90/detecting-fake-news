@@ -64,9 +64,6 @@ function(input, output) {
     
     if (input$world_map_var == "v2mecenefm_mean") {subtitle <- "Government media censorship"}
     if (input$world_map_var == "v2smgovdom_mean") {subtitle <- "Government dissemination of false information domestic"}
-    if (input$world_map_var == "v2smgovab_mean") {subtitle <- "Government dissemination of false information abroad"}
-    if (input$world_map_var == "v2smpardom_mean") {subtitle <- "Party dissemination of false information domestic"}
-    if (input$world_map_var == "v2smparab_mean") {subtitle <- "Party dissemination of false information abroad"}
     if (input$world_map_var == "v2smfordom_mean") {subtitle <- "Foreign governments dissemination of false information"}
     
     subtitle <- paste(subtitle, "in", input$world_map_year)
@@ -137,10 +134,11 @@ function(input, output) {
         "wordcloud",
         hcaes(
           name = word,
-          weight = freq
+          weight = as.integer(freq)
         ),
         name = "Word Count"
       ) %>% 
-      hc_title(text = "Article Word Cloud")
+      hc_title(text = "Article Word Cloud") %>% 
+      hc_add_theme(hc_theme_smpl(tooltip = list(valueDecimals = 0)))
   })))
 }

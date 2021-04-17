@@ -7,6 +7,7 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+setwd("/home/tyler/School/INSH5302/FreeProj")
 ```
 
 ```{r message=F, warning=F}
@@ -15,6 +16,8 @@ library(tidyverse)
 ```
 
 ***
+
+# Model Data
 
 ## Load, inspect, and clean the data from the tutorial
 
@@ -27,7 +30,7 @@ news_data <- read.csv("./data/data-flair/news.csv")
 news_data <- news_data %>% select(!c(X, title))
 ```
 
-## Load, inspect, clean, and merge the data from the ISOT data set with the tutorial data
+## Load, inspect, and clean the data from the ISOT data set
 
 ```{r}
 # Data from https://www.uvic.ca/engineering/ece/isot/datasets/fake-news/index.php
@@ -111,7 +114,109 @@ data <- data %>%
 write.csv(data, "./data/data.csv", row.names = FALSE)
 ```
 
+
+# Vdem data
+
 ```{r}
-#rm(list = ls())
+library(vdemdata)
+library(xts)
+
+# Retrieve data for world map of gov misinfo and assign globally
+df_govs <- vdem %>% 
+  select(
+    country_name,
+    year,
+    v2mecenefm_mean,    # Government media censorship
+    v2smgovdom_mean,    # Government dissemination of false information domestic
+    v2smfordom_mean     # Foreign governments dissemination of false information
+  ) %>% 
+  filter(year %in% 2000:2020)
+
+write.csv(df_govs, "./fake-news-app/vdem.csv", row.names = FALSE)
+```
+
+
+# Google Trends Data
+
+```{r}
+library(gtrendsR)
+
+# Query Google Trends and save only the date and hits columns for "interest est over time"
+fake_news <- gtrends(
+  keyword = "fake news",
+  time = "all",
+  gprop = "web"
+)
+fake_news <- fake_news$interest_over_time %>%
+  select(date, hits) %>% 
+  rename(fake_news = hits)
+
+misinformation <- gtrends(
+  keyword = "misinformation",
+  time = "all",
+  gprop = "web"
+)
+misinformation <- misinformation$interest_over_time %>%
+  select(date, hits) %>% 
+  rename(misinformation = hits)
+
+alternative_facts <- gtrends(
+  keyword = "alternative facts",
+  time = "all",
+  gprop = "web"
+)
+alternative_facts <- alternative_facts$interest_over_time %>%
+  select(date, hits) %>% 
+  rename(alternative_facts = hits)
+
+propaganda <- gtrends(
+  keyword = "propaganda",
+  time = "all",
+  gprop = "web"
+)
+propaganda <- propaganda$interest_over_time %>%
+  select(date, hits) %>% 
+  rename(conspiracy_theory = hits)
+
+pizza_gate <- gtrends(
+  keyword = "pizza gate",
+  time = "all",
+  gprop = "web"
+)
+pizza_gate <- pizza_gate$interest_over_time %>%
+  select(date, hits) %>% 
+  rename(pizza_gate = hits)
+
+qanon <- gtrends(
+  keyword = "qanon",
+  time = "all",
+  gprop = "web"
+)
+qanon <- qanon$interest_over_time %>%
+  select(date, hits) %>% 
+  rename(qanon = hits)
+```
+
+
+```{r}
+# Merge the data into one df
+df_gtrends <- merge(fake_news, misinformation)
+df_gtrends <- merge(df_gtrends, alternative_facts)
+df_gtrends <- merge(df_gtrends, propaganda)
+df_gtrends <- merge(df_gtrends, pizza_gate)
+df_gtrends <- merge(df_gtrends, qanon)
+df_gtrends <- df_gtrends %>% 
+  mutate_at(c("fake_news", "misinformation",
+              "alternative_facts", "conspiracy_theory",
+              "pizza_gate", "qanon"),
+            as.numeric) %>%
+  replace(is.na(.), 0)
+
+# Save to csv
+write.csv(df_gtrends, "./fake-news-app/gtrends.csv", row.names = FALSE)
+```
+
+```{r}
+rm(list = ls())
 ```
 

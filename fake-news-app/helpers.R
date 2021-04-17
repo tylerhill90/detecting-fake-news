@@ -39,5 +39,7 @@ process_text <- function(text) {
   return(dm_df)
 }
 
-# Retrieve data for world map of gov misinfo and assign globally
+# Retrieve data for world map of gov misinfo 
 df_govs <<- read.csv("vdem.csv")
+
+# Retrieve the data for google trends data 

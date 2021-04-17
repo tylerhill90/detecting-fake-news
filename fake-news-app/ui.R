@@ -18,7 +18,8 @@ dashboardPage(
       ),
       menuItem("Detection Model", tabName = "model", icon = icon("search"),
         menuSubItem("Model Overview", tabName = "model-overview", icon = icon("map-signs")),
-        menuSubItem("Run the Detection Model", tabName = "model-detect", icon = icon("check"))
+        menuSubItem("Run the Detection Model", tabName = "model-detect", icon = icon("check")),
+        menuSubItem("Model Performance", tabName = "model-performance", icon = icon("poll"))
       )
     )
   ),
@@ -103,12 +104,6 @@ dashboardPage(
           
           box(
             status = "primary",
-            h3("A Global Perspective"),
-            p("TODO")
-          ),
-          
-          box(
-            status = "primary",
             shinycssloaders::withSpinner(
               highchartOutput("world_govs")
             ),
@@ -118,9 +113,6 @@ dashboardPage(
               c(
                 "Government media censorship" = "v2mecenefm_mean",
                 "Government dissemination of false information domestic" = "v2smgovdom_mean",
-                "Government dissemination of false information abroad" = "v2smgovab_mean",
-                "Party dissemination of false information domestic" = "v2smpardom_mean",
-                "Party dissemination of false information abroad" = "v2smparab_mean",
                 "Foreign governments dissemination of false information" = "v2smfordom_mean"
               ),
               selected = "v2mecenefm"
@@ -158,53 +150,6 @@ dashboardPage(
               )
             ),
             conditionalPanel(
-              condition = "input.world_map_var == 'v2smgovab_mean'",
-              p(
-                "How often do the government and its agents use social media to disseminate misleading viewpoints or false
-                information to influence citizens of other countries abroad?", tags$br(), tags$br(),
-                "0: Extremely often. The government disseminates false information on all key political issues.", tags$br(),
-                "1: Often. The government disseminates false information on many key political issues.", tags$br(),
-                "2: About half the time. The government disseminates false information on some key political
-                issues, but not others.", tags$br(),
-                "3: Rarely. The government disseminates false information on only a few key political issues.", tags$br(),
-                "4: Never, or almost never. The government never disseminates false information on key political issues."
-              )
-            ),
-            conditionalPanel(
-              condition = "input.world_map_var == 'v2smpardom_mean'",
-              p(
-                "How often do major political parties and candidates for office use social media to disseminate misleading
-                viewpoints or false information to influence their own population?", tags$br(), tags$br(),
-                "0: Extremely often. Major political parties and candidates disseminate false information on all key
-                political issues.", tags$br(),
-                "1: Often. Major political parties and candidates disseminate false information on many key political
-                issues.", tags$br(),
-                "2: About half the time. Major political parties and candidates disseminate false information on some key
-                political issues, but not others.", tags$br(),
-                "3: Rarely. Major political parties and candidates disseminate false information on only a few key political
-                issues.", tags$br(),
-                "4: Never, or almost never. Major political parties and candidates never disseminate false information on
-                key political issues."
-              )
-            ),
-            conditionalPanel(
-              condition = "input.world_map_var == 'v2smparab_mean'",
-              p(
-                "How often do major political parties and candidates for office use social media to disseminate misleading
-                viewpoints or false information to influence citizens of other countries abroad?", tags$br(), tags$br(),
-                "0: Extremely often. Major political parties and candidates disseminate false information on all key
-                political issues.", tags$br(),
-                "1: Often. Major political parties and candidates disseminate false information on many key political
-                issues.", tags$br(),
-                "2: About half the time. Major political parties and candidates disseminate false information on some key
-                political issues, but not others.", tags$br(),
-                "3: Rarely. Major political parties and candidates disseminate false information on only a few key political
-                issues.", tags$br(),
-                "4: Never, or almost never. Major political parties and candidates never disseminate false information on
-                key political issues."
-              )
-            ),
-            conditionalPanel(
               condition = "input.world_map_var == 'v2smfordom_mean'",
               p(
                 "How routinely do foreign governments and their agents use social media to disseminate misleading viewpoints
@@ -218,6 +163,12 @@ dashboardPage(
               )
             )
             
+          ),
+          
+          box(
+            status = "primary",
+            h3("A Global Perspective"),
+            p("TODO")
           )
           
         )
@@ -288,14 +239,46 @@ dashboardPage(
           
           box(
             status = "primary",
-            h3("Input Article Results"),
-            highchartOutput("results_pie", height = "300px"),
-            tags$br(),
-            highchartOutput("results_word_cloud", height = "300px")
+            conditionalPanel(
+              condition = "input.run_model == 0",
+              h3("Input Article Results"),
+              p("Please run the model to see your results.")
+            ),
+            conditionalPanel(
+              condition = "input.run_model != 0",
+              h3("Input Article Results"),
+              shinycssloaders::withSpinner(
+                highchartOutput("results_pie", height = "300px")
+              ),
+              tags$br(),
+              shinycssloaders::withSpinner(
+                highchartOutput("results_word_cloud", height = "300px")
+              )
+            )
+          )
+          
+        )
+      ),
+      
+      tabItem(
+        tabName = "model-performance",
+        fluidRow(
+          
+          box(
+            status = "primary",
+            h3("Testing the Model on a Custom Data Set"),
+            p("TODO")
+          ),
+          
+          box(
+            status = "primary",
+            h3("Test Reults"),
+            p("TODO")
           )
           
         )
       )
+      
     )
   )
 )
