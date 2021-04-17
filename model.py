@@ -51,10 +51,11 @@ def main():
         f"\nClassification Report:\n\n{classification_report(y_test, y_pred)}")
 
     # Pickle the classifier
-    pickle.dump(pac, open("./shiny-app/pac.pickle", "wb"))
+    pickle.dump(pac, open("./fake-news-app/pac.pickle", "wb"))
 
     # Pickle the TfidfVectorizer
-    pickle.dump(tfidf_vec, open("./shiny-app/tfidf-vectorizer.pickle", "wb"))
+    pickle.dump(tfidf_vec, open(
+        "./fake-news-app/tfidf-vectorizer.pickle", "wb"))
 
 
 if __name__ == "__main__":

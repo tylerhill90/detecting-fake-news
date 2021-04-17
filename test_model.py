@@ -6,22 +6,24 @@ Script to test the fake news classifier model.
 
 import pickle
 import pandas as pd
+from sklearn.metrics import classification_report, accuracy_score
 
 
 def main():
     """Test the pac model."""
 
     # Unpickle the pac model and tokenizer
-    with open("./shiny-app/pac.pickle", "rb") as infile:
+    with open("./fake-news-app/pac.pickle", "rb") as infile:
         pac = pickle.load(infile)
 
-    with open("./shiny-app/tfidf-vectorizer.pickle", "rb") as infile:
+    with open("./fake-news-app/tfidf-vectorizer.pickle", "rb") as infile:
         tfidf_vec = pickle.load(infile)
 
     # Fetch input articles (manually curated)
-    article = pd.read_csv("./data/input-articles.csv")
+    article = pd.read_csv("./data/test-articles.csv")
 
-    print(f'Input:\n{article.head()}')
+    # Extract testing labels
+    y_test = pd.Series(data=article["label"])
 
     # Transfor input
     tfidf_test = tfidf_vec.transform(article["text"])
@@ -29,12 +31,15 @@ def main():
     # Predict
     y_pred = pac.predict(tfidf_test)
 
-    # Report prediction
-    print(f'\nPredictions: {y_pred}')
+    print(article)
+    print([print(f'{i}\t{pred}') for i, pred in enumerate(y_pred.tolist())])
+    print(y_test)
 
-    # Prediction probs
-    print(f'\nProbabilities for each prediction:\
-    \n\tFAKE\tREAL\n{pac._predict_proba_lr(tfidf_test)}')
+    # Report testing metrics
+    score = accuracy_score(y_test, y_pred)
+    print(f"Done training model.\n\nAccuracy: {round(score*100, 2)}%")
+    print(
+        f"\nClassification Report:\n\n{classification_report(y_test, y_pred)}")
 
 
 if __name__ == '__main__':

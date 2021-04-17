@@ -12,7 +12,7 @@ dashboardPage(
     sidebarMenu(
       id = "menu",
       menuItem("Background", tabName = "background", icon = icon("question")),
-      menuItem("Summary Stats", tabName = "stats", icon = icon("chart-bar"),
+      menuItem("Fake News Stats", tabName = "stats", icon = icon("chart-bar"),
         menuSubItem("General", tabName = "stats-general", icon = icon("chart-area")),
         menuSubItem("Governmental Influence", tabName = "stats-gov", icon = icon("globe-americas"))
       ),
@@ -65,7 +65,7 @@ dashboardPage(
       ## STATISTICS ##
       ################
       
-      ## Summary Stats
+      ## Fake News Stats
       tabItem(
         tabName = "stats-general",
         fluidRow(
@@ -78,9 +78,8 @@ dashboardPage(
           
           box(
             status = "primary",
-            shinycssloaders::withSpinner(
-              highchartOutput("google_trends")
-            ),
+            highchartOutput("google_trends"),
+            tags$br(),
             selectInput(
               "gtrends_query", "Select a Google Trends search",
               c(
@@ -93,7 +92,7 @@ dashboardPage(
               ),
               selected = "fake_news"
             ),
-            tags$br(), tags$br(), 
+            p(tags$strong("Explaination")),
             p("Google Trends is... TODO")
           )
           
@@ -110,6 +109,7 @@ dashboardPage(
             shinycssloaders::withSpinner(
               highchartOutput("world_govs")
             ),
+            tags$br(),
             selectInput(
               "world_map_var",
               "Select a variable to examine",
@@ -126,7 +126,7 @@ dashboardPage(
               c(2000:2020),
               selected = 2020
             ),
-            p(tags$strong("Selected Variable Explanation")),
+            p(tags$strong("Variable Explanation")),
             conditionalPanel(
               condition = "input.world_map_var == 'v2mecenefm_mean'",
               p(
