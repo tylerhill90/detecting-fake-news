@@ -8,8 +8,6 @@ library(dashboardthemes)
 library(tm)
 library(SnowballC)
 library(highcharter)
-library(vdemdata)
-library(gtrendsR)
 library(xts)
 
 # Func to process article text for analysis
@@ -40,6 +38,9 @@ process_text <- function(text) {
 }
 
 # Retrieve data for world map of gov misinfo 
-df_govs <<- read.csv("vdem.csv")
+df_govs <<- read.csv("vdem_data.csv")
 
 # Retrieve the data for google trends data 
+df_gtrends <- read.csv("gtrends_data.csv")
+df_gtrends <<- df_gtrends %>%
+  mutate(date = as.Date(date))

@@ -64,6 +64,8 @@ dashboardPage(
       ################
       ## STATISTICS ##
       ################
+      
+      ## Summary Stats
       tabItem(
         tabName = "stats-general",
         fluidRow(
@@ -76,28 +78,29 @@ dashboardPage(
           
           box(
             status = "primary",
-            conditionalPanel(
-              condition = "input.gtrends_search != 0",
-              shinycssloaders::withSpinner(
-                highchartOutput("google_trends")
-              )
+            shinycssloaders::withSpinner(
+              highchartOutput("google_trends")
             ),
-            conditionalPanel(
-              condition = "input.gtrends_search == 0",
-              h3("Google Trends Widget"),
-              tags$br(), 
-              p("Please enter a Google Trends query below to see it's relative popularity over time.")
+            selectInput(
+              "gtrends_query", "Select a Google Trends search",
+              c(
+                "fake news" = "fake_news",
+                "misinformation" = "misinformation",
+                "alternative facts" = "alternative_facts",
+                "lamestream media" = "lamestream_media",
+                "pizza gate" = "pizza_gate",
+                "qanon" = "qanon"
+              ),
+              selected = "fake_news"
             ),
-            textInput("gtrends_query", "", placeholder = 'Enter query here e.g. "fake news"'),
-            actionButton("gtrends_search", "Search Google Trends", icon = icon("search")),
             tags$br(), tags$br(), 
-            p("Google Trends is... TODO"),
-            p('Some search ideas are "fake news", "misinformation", "conspiracy theory", "pizzagate", "Qanon"')
+            p("Google Trends is... TODO")
           )
           
         )
       ),
       
+      ## World Govs
       tabItem(
         tabName = "stats-gov",
         fluidRow(
@@ -177,6 +180,8 @@ dashboardPage(
       ###########
       ## MODEL ##
       ###########
+      
+      ## Model background
       tabItem(
         tabName = "model-overview",
         fluidRow(
@@ -202,6 +207,7 @@ dashboardPage(
         )
       ),
       
+      ## Run the model
       tabItem(
         tabName = "model-detect",
         fluidRow(
@@ -260,6 +266,7 @@ dashboardPage(
         )
       ),
       
+      ## Model performance
       tabItem(
         tabName = "model-performance",
         fluidRow(

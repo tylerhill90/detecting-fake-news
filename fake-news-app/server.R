@@ -22,38 +22,25 @@ function(input, output) {
   ###########
   
   ## Google Trends Chart ##
-  observe({
-    if(
-      is.null(input$gtrends_query) || str_trim(input$gtrends_query) == ""
-    ) {
-      disable("gtrends_search")
-    }
-    else {
-      enable("gtrends_search")
-    }
-  })
   
-  get_gtrends_data <- eventReactive(input$gtrends_search, {
+  get_gtrends_data <- reactive({
     # Query Google Trends
-    chart_df <- gtrends(
-      keyword = input$gtrends_query,
-      time = "all",
-      gprop = "web"
-    )
-    
-    # Clean data
-    chart_df <- chart_df$interest_over_time %>%
-      select(date, hits)
+    chart_df <- df_gtrends %>% 
+      select(date, input$gtrends_query)
     chart_df <<- xts(chart_df[-1], order.by = chart_df$date)
     
-    title_ <<- paste('Google Trends Results: "', input$gtrends_query, '"', sep = '')
+    title_ <<- paste('Google Trends Results: "', gsub("_", " ", input$gtrends_query), '"', sep = '')
   })
   
   output$google_trends <- renderHighchart((({
     get_gtrends_data()
     
-    hchart(chart_df) %>% 
-      hc_title(text = title_)
+    hchart(
+      chart_df,
+      name = "Relative Interest"
+    ) %>% 
+      hc_title(text = title_) %>% 
+      hc_add_theme(hc_theme_smpl(tooltip = list(valueDecimals = 0)))
   })))
   
   ## World Map - Gov Influence ##
