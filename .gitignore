@@ -4,9 +4,6 @@ data/
 ConceptSketches/
 .RData
 .Rhistory
-*.csv
-!vdem.csv
-!article.csv
 *.dcf
 *.zip
 .Rproj.user
