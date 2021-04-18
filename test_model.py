@@ -31,13 +31,11 @@ def main():
     # Predict
     y_pred = pac.predict(tfidf_test)
 
-    print(article)
-    print([print(f'{i}\t{pred}') for i, pred in enumerate(y_pred.tolist())])
-    print(y_test)
+    print(tfidf_test)
 
     # Report testing metrics
     score = accuracy_score(y_test, y_pred)
-    print(f"Done training model.\n\nAccuracy: {round(score*100, 2)}%")
+    print(f"\nAccuracy: {round(score*100, 2)}%")
     print(
         f"\nClassification Report:\n\n{classification_report(y_test, y_pred)}")
 

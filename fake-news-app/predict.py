@@ -8,6 +8,12 @@ import pickle
 import pandas as pd
 
 
+def main():
+    """Run the predict_results func."""
+
+    predict_results()
+
+
 def predict_results():
     """Predicts whether a article's body text is fake or not."""
 
@@ -38,3 +44,7 @@ def predict_results():
     }
 
     return data
+
+
+if __name__ == "__main__":
+    main()

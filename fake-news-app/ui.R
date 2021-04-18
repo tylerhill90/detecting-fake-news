@@ -11,12 +11,12 @@ dashboardPage(
   dashboardSidebar(
     sidebarMenu(
       id = "menu",
-      menuItem("Background", tabName = "background", icon = icon("question")),
-      menuItem("Fake News Stats", tabName = "stats", icon = icon("chart-bar"),
-        menuSubItem("General", tabName = "stats-general", icon = icon("chart-area")),
-        menuSubItem("Governmental Influence", tabName = "stats-gov", icon = icon("globe-americas"))
+      menuItem("Background", tabName = "background", icon = icon("question"),
+        menuSubItem("Historical Perspective", tabName = "history", icon = icon("landmark")),
+        menuSubItem("Social Media", tabName = "social-media", icon = icon("hashtag")),
+        menuSubItem("Governmental Influence", tabName = "gov", icon = icon("globe-americas"))
       ),
-      menuItem("Detection Model", tabName = "model", icon = icon("search"),
+      menuItem("Detection Modeling", tabName = "model", icon = icon("search"),
         menuSubItem("Model Overview", tabName = "model-overview", icon = icon("map-signs")),
         menuSubItem("Run the Detection Model", tabName = "model-detect", icon = icon("check")),
         menuSubItem("Model Performance", tabName = "model-performance", icon = icon("poll"))
@@ -26,6 +26,7 @@ dashboardPage(
   dashboardBody(
     
     useShinyjs(),
+    useShinyalert(),
     
     # Set the theme
     shinyDashboardThemes(
@@ -36,43 +37,15 @@ dashboardPage(
       ################
       ## BACKGROUND ##
       ################
+      
+      ## History
       tabItem(
-        tabName = "background",
+        tabName = "history",
         fluidRow(
           
           box(
             status = "primary",
-            h3("A Historical Perspective"),
-            p("TODO")
-          ),
-          
-          box(
-            status = "primary",
-            h3("The Role of Social Media"),
-            p("TODO")
-          ),
-          
-          box(
-            status = "primary",
-            h3("Government’s Role"),
-            p("TODO")
-          )
-          
-        )
-      ),
-      
-      ################
-      ## STATISTICS ##
-      ################
-      
-      ## Fake News Stats
-      tabItem(
-        tabName = "stats-general",
-        fluidRow(
-          
-          box(
-            status = "primary",
-            h3("Summary Stats"),
+            h3("Historical Perspective"),
             p("TODO")
           ),
           
@@ -98,11 +71,44 @@ dashboardPage(
           
         )
       ),
-      
-      ## World Govs
+
+      ## Social Media
       tabItem(
-        tabName = "stats-gov",
+        tabName = "social-media",
         fluidRow(
+
+          box(
+            status = "primary",
+            h3("The Role of Social Media"),
+            p()
+          ),
+
+          box(
+            status = "primary",
+            highchartOutput("sm_usage", height = "320px"),
+            tags$br(),
+            highchartOutput("sm_trust", height = "320px"),
+            tags$br(),
+            helpText(p(
+              "Source:", tags$br(),
+              tags$a(href = "https://www.journalism.org/2021/01/12/news-use-across-social-media-platforms-in-2020/",
+                     "Pew Research Center - News Use Across Social Media Platforms in 2020")
+            ))
+          )
+
+        )
+      ),
+      
+      ## Government Influence
+      tabItem(
+        tabName = "gov",
+        fluidRow(
+          
+          box(
+            status = "primary",
+            h3("A Government's Role"),
+            p("TODO")
+          ),
           
           box(
             status = "primary",
@@ -131,11 +137,11 @@ dashboardPage(
               condition = "input.world_map_var == 'v2mecenefm_mean'",
               p(
                 "Does the government directly or indirectly attempt to censor the print or broadcast media?", tags$br(), tags$br(),
-              "0: Attempts to censor are direct and routine.", tags$br(),
-              "1: Attempts to censor are indirect but nevertheless routine.", tags$br(),
-              "2: Attempts to censor are direct but limited to especially sensitive issues.", tags$br(),
-              "3: Attempts to censor are indirect and limited to especially sensitive issues.", tags$br(),
-              "4: The government rarely attempts to censor major media in any way, and when such exceptional
+                "0: Attempts to censor are direct and routine.", tags$br(),
+                "1: Attempts to censor are indirect but nevertheless routine.", tags$br(),
+                "2: Attempts to censor are direct but limited to especially sensitive issues.", tags$br(),
+                "3: Attempts to censor are indirect and limited to especially sensitive issues.", tags$br(),
+                "4: The government rarely attempts to censor major media in any way, and when such exceptional
               attempts are discovered, the responsible officials are usually punished."
               )
             ),
@@ -166,12 +172,6 @@ dashboardPage(
               )
             )
             
-          ),
-          
-          box(
-            status = "primary",
-            h3("A Global Perspective"),
-            p("TODO")
           )
           
         )

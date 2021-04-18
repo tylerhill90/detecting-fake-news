@@ -4,7 +4,7 @@
 source("helpers.R")
 
 # Set highcharter options
-options(highcharter.theme = hc_theme_smpl(tooltip = list(valueDecimals = 2)))
+options(highcharter.theme = hc_theme_smpl(tooltip = list(valueDecimals = 0)))
 
 # Python resources
 virtualenv_create(envname = "python_environment", python= "python3")
@@ -13,37 +13,80 @@ reticulate::use_virtualenv("python_environment", required = TRUE)
 source_python("./predict.py")
 
 function(input, output) {
+  # Inform user how to toggle sidebar menu
+  observe({
+    shinyalert(
+      title = 'Press the &nbsp; <i class="fas fa-bars"></i> &nbsp; button at the top of the page to toggle the sidebar menu off and on.',
+      html = TRUE
+    )
+  }) 
+  
   ################
   ## BACKGROUND ##
   ################
   
-  ###########
-  ## STATS ##
-  ###########
-  
-  ## Google Trends Chart ##
-  
-  get_gtrends_data <- reactive({
-    # Query Google Trends
-    chart_df <- df_gtrends %>% 
-      select(date, input$gtrends_query)
-    chart_df <<- xts(chart_df[-1], order.by = chart_df$date)
-    
-    title_ <<- paste('Google Trends Results: "', gsub("_", " ", input$gtrends_query), '"', sep = '')
-  })
-  
-  output$google_trends <- renderHighchart((({
-    get_gtrends_data()
-    
-    hchart(
-      chart_df,
-      name = "Relative Interest"
-    ) %>% 
-      hc_title(text = title_) %>% 
-      hc_add_theme(hc_theme_smpl(tooltip = list(valueDecimals = 0)))
+  ## Social media usage for news
+  # https://www.journalism.org/2021/01/12/news-use-across-social-media-platforms-in-2020/
+  output$sm_usage <- renderHighchart((({
+    df_usage <- data.frame(type = c("Often", "Sometimes", "Rarely",
+                                    "Never", "Doesn't  get digital news"),
+                           freq = c(23, 30, 18, 21, 7))
+    df_usage %>% 
+      hchart(
+        "pie",
+        hcaes(
+          x = type,
+          y = freq
+        ),
+        name = "Percent"
+      ) %>% 
+      hc_title(text = "Percent of U.S. adults who get news from social media in 2020")
   })))
   
-  ## World Map - Gov Influence ##
+  output$sm_trust <- renderHighchart((({
+    df_trust <- data.frame(type = rev(c("Largely accurate", "Largely inaccurate",
+                                    "Largely accurate", "Largely inaccurate",
+                                    "Largely accurate", "Largely inaccurate")),
+                           freq = rev(c(39, 59, 40, 59, 42, 57)),
+                           year = rev(c(2020, 2020, 2019, 2019, 2018, 2018)))
+    df_trust %>% 
+      hchart(
+        "bar",
+        hcaes(
+          x = year,
+          y = freq,
+          group = type
+        ),
+        stacking = "normal"
+      ) %>% 
+      hc_title(text = "Percent of social media consumers who expect news they see on social media to be...") %>% 
+      hc_xAxis(
+        title = list(text = "Year"),
+        reversed = FALSE
+      ) %>%
+      hc_yAxis(
+        title = list(text = "Percent"),
+        max = 100
+      ) %>% 
+      hc_legend(reversed = TRUE, align = "center")
+  })))
+  
+  ## Google Trends Chart
+  output$google_trends <- renderHighchart((({
+    chart_df <- df_gtrends %>% 
+      select(date, input$gtrends_query)
+    chart_df <- xts(chart_df[-1], order.by = chart_df$date)
+    
+    title_ <- paste('Google Trends Results: "', gsub("_", " ", input$gtrends_query), '"', sep = '')
+    
+    chart_df %>% 
+      hchart(
+        name = "Relative Interest"
+      ) %>% 
+        hc_title(text = title_)
+  })))
+  
+  ## World Map - Gov Influence
   output$world_govs <- renderHighchart((({
     chart_df <- df_govs %>% 
       filter(year == input$world_map_year) %>% 
@@ -55,7 +98,7 @@ function(input, output) {
     
     subtitle <- paste(subtitle, "in", input$world_map_year)
     
-    highchart(type = "map") %>% 
+    highchart() %>% 
       hc_add_series_map(
         worldgeojson,
         chart_df,
@@ -63,11 +106,11 @@ function(input, output) {
         joinBy = c("name", "country_name"),
         name = "Index Score"
       ) %>% 
-      hc_colorAxis(
-        stops = color_stops()
-      ) %>% 
+      hc_colorAxis(stops = color_stops()) %>% 
       hc_mapNavigation(enabled = TRUE) %>% 
-      hc_title(text = subtitle)
+      hc_title(text = subtitle) %>% 
+      hc_add_theme(hc_theme_smpl(tooltip = list(valueDecimals = 2))) %>%
+      hc_credits(enabled = TRUE, text = "Scale: 0 = Worse to 4 = Best<br>", style = list(fontSize = "12px"))
   })))
   
   ###########
@@ -125,7 +168,6 @@ function(input, output) {
         ),
         name = "Word Count"
       ) %>% 
-      hc_title(text = "Article Word Cloud") %>% 
-      hc_add_theme(hc_theme_smpl(tooltip = list(valueDecimals = 0)))
+      hc_title(text = "Article Word Cloud")
   })))
 }
