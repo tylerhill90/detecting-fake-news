@@ -279,7 +279,7 @@ dashboardPage(
           
           box(
             status = "primary",
-            h3("Test Reults"),
+            h3("Test Results"),
             p("TODO")
           )
           

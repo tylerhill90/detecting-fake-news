@@ -2,6 +2,8 @@
 
 """
 Script to test the fake news classifier model.
+Prints an accuracy score and other test metrics.
+Outputs a csv of labels, predictions, and sources.
 """
 
 import pickle
@@ -31,13 +33,19 @@ def main():
     # Predict
     y_pred = pac.predict(tfidf_test)
 
-    print(tfidf_test)
-
     # Report testing metrics
     score = accuracy_score(y_test, y_pred)
     print(f"\nAccuracy: {round(score*100, 2)}%")
     print(
         f"\nClassification Report:\n\n{classification_report(y_test, y_pred)}")
+
+    test_df = pd.DataFrame({
+        "label": article["label"],
+        "prediction": y_pred,
+        "source": article["source"]
+    })
+
+    test_df.to_csv("./fake-news-app/model-test-results.csv", index=False)
 
 
 if __name__ == '__main__':
