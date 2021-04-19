@@ -170,4 +170,30 @@ function(input, output) {
       ) %>% 
       hc_title(text = "Article Word Cloud")
   })))
+  
+  ## Model test results
+  output$confusion_matrix <- renderHighchart((({
+    con_mat <- confusionMatrix(data = factor(df_test$prediction), reference = factor(df_test$label))
+    as.data.frame(con_mat$table) %>% 
+      mutate(Freq = Freq / sum(Freq)) %>%
+      mutate(name = ifelse(Prediction == "FAKE" & Reference == "FAKE", "True Negative", NA)) %>% 
+      mutate(name = ifelse(Prediction == "REAL" & Reference == "FAKE", "False Positive", name)) %>% 
+      mutate(name = ifelse(Prediction == "FAKE" & Reference == "REAL", "False Negative", name)) %>% 
+      mutate(name = ifelse(Prediction == "REAL" & Reference == "REAL", "True Positive", name)) %>% 
+      hchart(
+        "heatmap",
+        hcaes(
+          x = Prediction,
+          y = Reference,
+          value = Freq,
+          group = name
+        ),
+        dataLabels = list(enabled = TRUE, visible = FALSE)
+      ) %>% 
+      hc_xAxis(reversed = TRUE, opposite = TRUE) %>% 
+      hc_legend(enabled = FALSE) %>% 
+      hc_add_theme(hc_theme_smpl(tooltip = list(valueDecimals = 2))) %>% 
+      hc_tooltip(pointFormat = '{name}') %>% 
+      hc_title(text = "Confusion matrix of model testing")
+  })))
 }

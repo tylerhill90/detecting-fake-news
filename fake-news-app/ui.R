@@ -279,7 +279,8 @@ dashboardPage(
           
           box(
             status = "primary",
-            h3("Test Results"),
+            highchartOutput("confusion_matrix"),
+            tags$br(),
             p("TODO")
           )
           

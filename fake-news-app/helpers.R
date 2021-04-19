@@ -10,6 +10,7 @@ library(tm)
 library(SnowballC)
 library(highcharter)
 library(xts)
+library(caret)
 
 # Func to process article text for analysis
 process_text <- function(text) {
@@ -45,3 +46,6 @@ df_govs <<- read.csv("vdem_data.csv")
 df_gtrends <- read.csv("gtrends_data.csv")
 df_gtrends <<- df_gtrends %>%
   mutate(date = as.Date(date))
+
+# Retrieve the model testing data
+df_test <- read.csv("model-test-results.csv")
