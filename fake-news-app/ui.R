@@ -280,8 +280,26 @@ dashboardPage(
           
           box(
             status = "primary",
-            h3("Overview of the Models Used"),
-            p("TODO")
+            h3("Overview of how the model works"),
+            p("To build this machine learning model I employed a TF-IDF Vectorizer and Passive Aggressive Classifier
+              from the python package scikit-learn.",
+              tags$br(), tags$br(),
+              "A TF-IDF Vectorizer takes text as an input and computes the
+              Term Frequency (TF), which measures how many times each word occurs in a text, and the Inverse Document Frequency (IDF)
+              , which gives a measures how common or rare a word is across all the texts examined. This essentially transforms the text
+              input into a more computer friendly format that can then be fed into a machine learning algorithm.",
+              tags$br(), tags$br(),
+              "A Passive Aggressive Classifier (PAC) is a machine learning algorithm that takes input in sequentially and
+              updates it's model with each new piece of input step by step and is particualry good at dealing with large
+              streams of continuously updating data. PACs are passive because as they are trained, if the
+              prediction is correct the model is not changed. PACs are also aggressive because as they are trained, if the prediction
+              is NOT correct it will update and change the model according to some penalizing parameter. A PAC will be trained on the
+              given data a certain number of times defined and stops when it reaches a defined stopping criterion associated with the
+              models loss.",
+              tags$br(), tags$br(),
+              "For a much more indepth explaination on how PACs work watch",
+              tags$a(href = "https://www.youtube.com/watch?v=TJU8NfDdqNQ&ab_channel=VictorLavrenko", "this video.")
+              )
           ),
           
           box(
