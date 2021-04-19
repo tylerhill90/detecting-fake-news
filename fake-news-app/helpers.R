@@ -10,7 +10,6 @@ library(tm)
 library(SnowballC)
 library(highcharter)
 library(xts)
-library(caret)
 
 # Func to process article text for analysis
 process_text <- function(text) {

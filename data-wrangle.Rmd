@@ -13,6 +13,7 @@ setwd("/home/tyler/School/INSH5302/FreeProj")
 ```{r message=F, warning=F}
 # Load libraries
 library(tidyverse)
+library(caret)
 ```
 
 ***
@@ -216,7 +217,18 @@ df_gtrends <- df_gtrends %>%
 write.csv(df_gtrends, "./fake-news-app/gtrends_data.csv", row.names = FALSE)
 ```
 
+# Confusion Matrix data
+
 ```{r}
-rm(list = ls())
+df_test <- read.csv("./fake-news-app/model-test-results.csv")
+con_mat <- confusionMatrix(data = factor(df_test$prediction), reference = factor(df_test$label))
+con_mat <- as.data.frame(con_mat$table) %>% 
+      mutate(Freq = Freq / sum(Freq)) %>%
+      mutate(name = ifelse(Prediction == "FAKE" & Reference == "FAKE", "True Negative", NA)) %>% 
+      mutate(name = ifelse(Prediction == "REAL" & Reference == "FAKE", "False Positive", name)) %>% 
+      mutate(name = ifelse(Prediction == "FAKE" & Reference == "REAL", "False Negative", name)) %>% 
+      mutate(name = ifelse(Prediction == "REAL" & Reference == "REAL", "True Positive", name))
+# Save to csv
+write.csv(con_mat, "./fake-news-app/model-test-results.csv", row.names = FALSE)
 ```
 

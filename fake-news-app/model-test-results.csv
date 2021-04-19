@@ -1,51 +1,5 @@
-label,prediction,source
-REAL,REAL,npr
-REAL,REAL,npr
-REAL,REAL,npr
-REAL,REAL,npr
-REAL,REAL,npr
-REAL,REAL,npr
-REAL,REAL,npr
-REAL,REAL,npr
-REAL,REAL,npr
-REAL,REAL,npr
-REAL,REAL,politico
-REAL,REAL,politico
-REAL,REAL,politico
-REAL,REAL,politico
-REAL,REAL,politico
-REAL,FAKE,politico
-REAL,REAL,politico
-REAL,REAL,politico
-REAL,REAL,politico
-REAL,FAKE,politico
-REAL,FAKE,cnn
-REAL,FAKE,cnn
-REAL,REAL,cnn
-REAL,REAL,cnn
-REAL,REAL,cnn
-REAL,REAL,cnn
-REAL,REAL,cnn
-REAL,REAL,cnn
-REAL,REAL,cnn
-REAL,REAL,cnn
-REAL,REAL,fox
-REAL,FAKE,fox
-REAL,FAKE,fox
-REAL,REAL,fox
-FAKE,FAKE,social
-FAKE,FAKE,social
-FAKE,FAKE,theoinion
-FAKE,FAKE,theoinion
-FAKE,REAL,theonion
-FAKE,REAL,theonion
-FAKE,FAKE,social
-FAKE,FAKE,social
-FAKE,REAL,infowars
-FAKE,FAKE,infowars
-FAKE,FAKE,infowars
-FAKE,FAKE,infowars
-FAKE,REAL,breitbart
-FAKE,REAL,breitbart
-FAKE,FAKE,theoinion
-FAKE,FAKE,theoinion
+"Prediction","Reference","Freq","name"
+"FAKE","FAKE",0.22,"True Negative"
+"REAL","FAKE",0.1,"False Positive"
+"FAKE","REAL",0.12,"False Negative"
+"REAL","REAL",0.56,"True Positive"
