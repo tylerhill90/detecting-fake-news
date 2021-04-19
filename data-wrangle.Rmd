@@ -161,14 +161,14 @@ misinformation <- misinformation$interest_over_time %>%
   select(date, hits) %>% 
   rename(misinformation = hits)
 
-alternative_facts <- gtrends(
-  keyword = "alternative facts",
+disinformation <- gtrends(
+  keyword = "disinformation",
   time = "all",
   gprop = "web"
 )
-alternative_facts <- alternative_facts$interest_over_time %>%
+disinformation <- disinformation$interest_over_time %>%
   select(date, hits) %>% 
-  rename(alternative_facts = hits)
+  rename(disinformation = hits)
 
 lamestream_media <- gtrends(
   keyword = "lamestream media",
@@ -202,13 +202,13 @@ qanon <- qanon$interest_over_time %>%
 ```{r}
 # Merge the data into one df
 df_gtrends <- merge(fake_news, misinformation)
-df_gtrends <- merge(df_gtrends, alternative_facts)
+df_gtrends <- merge(df_gtrends, disinformation)
 df_gtrends <- merge(df_gtrends, lamestream_media)
 df_gtrends <- merge(df_gtrends, pizza_gate)
 df_gtrends <- merge(df_gtrends, qanon)
 df_gtrends <- df_gtrends %>% 
   mutate_at(c("fake_news", "misinformation",
-              "alternative_facts",
+              "disinformation",
               "pizza_gate", "qanon"),
             as.numeric) %>%
   replace(is.na(.), 0)
@@ -220,6 +220,7 @@ write.csv(df_gtrends, "./fake-news-app/gtrends_data.csv", row.names = FALSE)
 # Confusion Matrix data
 
 ```{r}
+# Run only after re-training the model in model.py
 df_test <- read.csv("./fake-news-app/model-test-results.csv")
 con_mat <- confusionMatrix(data = factor(df_test$prediction), reference = factor(df_test$label))
 con_mat <- as.data.frame(con_mat$table) %>% 

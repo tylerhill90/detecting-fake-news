@@ -190,4 +190,32 @@ function(input, output) {
       hc_tooltip(pointFormat = '{name}') %>% 
       hc_title(text = "Confusion matrix")
   })))
+  
+  output$accuracy <- renderHighchart((({
+    to_percent <- function(x) (round(x * 100, 2))
+    df_test %>% 
+      filter(name %in% c("True Positive", "True Negative")) %>% 
+      select(Freq) %>% 
+      mutate_all(to_percent) %>% 
+      summarise(Accuracy = sum(Freq)) %>% 
+      hchart(
+        "bar",
+        hcaes(
+          x = "Accuracy",
+          y = Accuracy
+        ),
+        pointWidth = 80,
+        height = "200px"
+      ) %>% 
+      hc_yAxis(
+        title = list(text = "Percent"),
+        max = 100
+      ) %>% 
+      hc_xAxis(
+        title = list(text = ""),
+        labels = list(enabled = FALSE)
+      ) %>%
+      hc_tooltip(pointFormat = '{Accuracy}') %>% 
+      hc_title(text = "Model Accuracy")
+  })))
 }

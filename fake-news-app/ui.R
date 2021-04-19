@@ -12,7 +12,7 @@ dashboardPage(
     sidebarMenu(
       id = "menu",
       menuItem("Background", tabName = "background", icon = icon("question"),
-        menuSubItem("Historical Perspective", tabName = "history", icon = icon("landmark")),
+        menuSubItem("Overview", tabName = "overview", icon = icon("info")),
         menuSubItem("Social Media", tabName = "social-media", icon = icon("hashtag")),
         menuSubItem("Governmental Influence", tabName = "gov", icon = icon("globe-americas"))
       ),
@@ -33,24 +33,67 @@ dashboardPage(
       theme = "poor_mans_flatly"
     ),
     
+    # Custom CSS
+    tags$style(
+      HTML("
+      img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    ")
+    ),
+    
     tabItems(
       ################
       ## BACKGROUND ##
       ################
       
-      ## History
+      ## Overview
       tabItem(
-        tabName = "history",
+        tabName = "overview",
         fluidRow(
           
           box(
             status = "primary",
+            h3("What is fake news?"),
+            p(tags$img(src = "icon.png", width = "33%", style = "align: top; clear:left; float: right"),
+              "As you may have already guessed or known, fake news is any news that presents itself as truthful
+              when in fact it is false or misleading. There are two major distinctions to be made here,
+              misinformation and disinformation.", tags$strong("Misinformation"), "is false information that
+              is spread regardless of the intent to mislead.", tags$strong("Disinformation"), "is false information
+              that is spread WITH the intent to mislead. Put another way, disinformation is when misinformation is
+              knowingly disseminated."),
+            tags$br(),
             h3("Historical Perspective"),
-            p("TODO")
+            h4("Ancient Times"),
+            p("Fake news has been used as a propaganda tool throughout all of human history, from",
+              tags$a(href = "https://theconversation.com/the-fake-news-that-sealed-the-fate-of-antony-and-cleopatra-71287",
+                     "Octavian slandering Marc Antony"), "in ancient Rome, to the sensational",
+              tags$a(href = "https://en.wikipedia.org/wiki/Yellow_journalism", "yellow journalism"),
+                     "of the early 20th century."),
+            tags$img(src = "yellow-journalism.jpg", width = "75%"),
+            h4("Modern Times"),
+            p("Fake news may well be at an all time high right now with the advent of the internet and social media as tools for
+              the rapid and widespread dissemination for information, real or fake. Entire websites like",
+              tags$a(href = "https://www.snopes.com/", "Snopes.com"), "and",
+              tags$a(href = "http://factcheck.org/", "FactCheck.org"),
+              "now exist to fact investigate the claims that make their way across the internet and into the public
+              consciousness. While photoshopped pictures have been a tool in the arsenal of fake news for a few decades now,
+              on the horizon are even more troubling technologies such as",
+              tags$a(href = "https://en.wikipedia.org/wiki/Deepfake", "deepfakes."), 'These "synthetic media" technologies 
+              use AI to create custom video and audio content that can be indiscernible as a fake and may fundamentally alter
+              our trust in what we see in the media.')
           ),
           
           box(
             status = "primary",
+            h3("Modern public interest in fake news"),
+            p("Below is a tool for exploring",
+              tags$a(href = "https://trends.google.com/trends/", "Google Trends"),
+              "data for search terms related to fake news and popular conspiracy theories.
+              The data is from 2004 to the preseent, as this is when Google Trends began tacking
+              public interest in search terms, and tracks the global interest in the queried term."),
             highchartOutput("google_trends"),
             tags$br(),
             selectInput(
@@ -58,15 +101,17 @@ dashboardPage(
               c(
                 "fake news" = "fake_news",
                 "misinformation" = "misinformation",
-                "alternative facts" = "alternative_facts",
+                "disinformation" = "disinformation",
                 "lamestream media" = "lamestream_media",
                 "pizza gate" = "pizza_gate",
                 "qanon" = "qanon"
               ),
               selected = "fake_news"
             ),
-            p(tags$strong("Explaination")),
-            p("Google Trends is... TODO")
+            p('We can see that many of these search terms are at their highest in more recent years, especially around
+              the US presidential elections in 2016 and 2020. The role of politics and governments in fake news goes
+              hand in hand as a tool swaying for public opinion and is explored further in the "Governmental Influence" page
+              of this site.')
           )
           
         )
@@ -80,7 +125,30 @@ dashboardPage(
           box(
             status = "primary",
             h3("The Role of Social Media"),
-            p()
+            p('It is undeniable that social media has forever changed the social landscape of our modern world.
+              We can now curate our identities online through these platforms and through them even find community.
+              Unfortunately, this can often lead to echo chambers where misleading and potentiallly harmful information
+              is spread between members quickly. A',
+              tags$a(href = "https://science.sciencemag.org/content/359/6380/1146", "2018 MIT study"), 'found that
+              "...falsehood diffuses significantly farther,
+              faster, deeper, and more broadly than the truth, in all categories of information, and in many cases by an order
+              of magnitude..." on the Twitter platform. Still, the public seems to be catching on.
+              Over the years a growing mistrust has been built for
+              the news that pops up in social media feeds. A',
+              tags$a(href = "https://www.journalism.org/2021/01/12/news-use-across-social-media-platforms-in-2020/", 
+              "2020 Pew Research poll"), 'found that while more than half of American
+              adults surveyed got their news from social media at least sometimes, only 39% of those surveyed thought that this
+              news was largely accurate.',
+              tags$br(), tags$br(), 'The use of "bots" that can algorithmically repost content for views can also quickly spread
+              fake news with little effort on social media platforms. The',
+              tags$a(href = "https://www.imperva.com/blog/bot-traffic-report-2016/", 'Imperva Incapsula "2016 Bot Traffic Report"'),
+              'found that nearly 30% of the traffic on the internet could be attributed to so called "bad bots" that are designed
+              for nefarious purposes such as to spam, mine user data, or manipulate public opinion.', tags$br(), tags$br(), 
+              'In 2016 we saw a',
+              tags$a(href = "https://time.com/4930532/facebook-russian-accounts-2016-election/", "weaponizing of social media"),
+              'fake news by the Russian state to influence the presidential election.
+              Russia was found to have paid an army of "internet trolls" and bots to create and spread disinformation about the US election,
+              primarily on Facebook and Twitter, to negatively impact Hillary Clinton\'s chances.')
           ),
 
           box(
@@ -107,7 +175,25 @@ dashboardPage(
           box(
             status = "primary",
             h3("A Government's Role"),
-            p("TODO")
+            p("Fake news has been employed by governments around the world as a tool for swaying public opinion
+              for all of recorded history. For a government to not employ some form of disinformation, foreign or
+              domestic, seems to be the exception not the rule. Whether the government is overtly controlling and/or
+              censoring the media
+              or just covertly influencing them through intelligence agencies, there are few countries that don't practice some
+              form of media manipulation. Some modern examples include the disinformation campaign by Russia during the",
+              tags$a(href = "https://www.reuters.com/article/us-ukraine-crisis-russia-media-idUSKBN15Q0MG", "annexing of Crimea"),
+              "in 2014 and China's use of fake news during the",
+              tags$a(href = "https://www.theguardian.com/world/2019/aug/11/hong-kong-china-unrest-beijing-media-response",
+                     "2019-2020 Hong Kong protests."),
+              tags$br(), tags$br(),
+              tags$img(src = "cencorship.png", width = "50%"),
+              tags$br(),
+              "In the infographic on this page we explore the use of disinformation by governments across the world from 2000 to 2020
+              through the", tags$a(href = "https://www.v-dem.net/en/data/data/v-dem-dataset-v111/", "V-Dem Version 11.1 data set."),
+              'Varieties of Democracy (V-Dem) is an independent research institute that, in their own words, "provide[s] a
+              multidimensional and disaggregated dataset that reflects the complexity of the concept of democracy as a system of rule
+              that goes beyond the simple presence of elections."'
+            )
           ),
           
           box(
@@ -279,9 +365,9 @@ dashboardPage(
           
           box(
             status = "primary",
-            highchartOutput("confusion_matrix"),
+            highchartOutput("accuracy", height = "160px"),
             tags$br(),
-            p("TODO")
+            highchartOutput("confusion_matrix")
           )
           
         )
