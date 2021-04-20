@@ -16,10 +16,9 @@ dashboardPage(
         menuSubItem("Social Media", tabName = "social-media", icon = icon("hashtag")),
         menuSubItem("Governmental Influence", tabName = "gov", icon = icon("globe-americas"))
       ),
-      menuItem("Detection Modeling", tabName = "model", icon = icon("search"),
+      menuItem("Detection Model", tabName = "model", icon = icon("search"),
         menuSubItem("Model Overview", tabName = "model-overview", icon = icon("map-signs")),
-        menuSubItem("Run the Detection Model", tabName = "model-detect", icon = icon("check")),
-        menuSubItem("Model Performance", tabName = "model-performance", icon = icon("poll"))
+        menuSubItem("Run the Model", tabName = "model-detect", icon = icon("check"))
       )
     )
   ),
@@ -79,11 +78,7 @@ dashboardPage(
               tags$a(href = "https://www.snopes.com/", "Snopes.com"), "and",
               tags$a(href = "http://factcheck.org/", "FactCheck.org"),
               "now exist to fact investigate the claims that make their way across the internet and into the public
-              consciousness. While photoshopped pictures have been a tool in the arsenal of fake news for a few decades now,
-              on the horizon are even more troubling technologies such as",
-              tags$a(href = "https://en.wikipedia.org/wiki/Deepfake", "deepfakes."), 'These "synthetic media" technologies 
-              use AI to create custom video and audio content that can be indiscernible as a fake and may fundamentally alter
-              our trust in what we see in the media.')
+              consciousness.")
           ),
           
           box(
@@ -139,16 +134,8 @@ dashboardPage(
               "2020 Pew Research poll"), 'found that while more than half of American
               adults surveyed got their news from social media at least sometimes, only 39% of those surveyed thought that this
               news was largely accurate.',
-              tags$br(), tags$br(), 'The use of "bots" that can algorithmically repost content for views can also quickly spread
-              fake news with little effort on social media platforms. The',
-              tags$a(href = "https://www.imperva.com/blog/bot-traffic-report-2016/", 'Imperva Incapsula "2016 Bot Traffic Report"'),
-              'found that nearly 30% of the traffic on the internet could be attributed to so called "bad bots" that are designed
-              for nefarious purposes such as to spam, mine user data, or manipulate public opinion.', tags$br(), tags$br(), 
-              'In 2016 we saw a',
-              tags$a(href = "https://time.com/4930532/facebook-russian-accounts-2016-election/", "weaponizing of social media"),
-              'fake news by the Russian state to influence the presidential election.
-              Russia was found to have paid an army of "internet trolls" and bots to create and spread disinformation about the US election,
-              primarily on Facebook and Twitter, to negatively impact Hillary Clinton\'s chances.')
+              tags$br(), tags$br(),
+              tags$img(src = "social-media.png", width = "50%"))
           ),
 
           box(
@@ -177,10 +164,8 @@ dashboardPage(
             h3("A Government's Role"),
             p("Fake news has been employed by governments around the world as a tool for swaying public opinion
               for all of recorded history. For a government to not employ some form of disinformation, foreign or
-              domestic, seems to be the exception not the rule. Whether the government is overtly controlling and/or
-              censoring the media
-              or just covertly influencing them through intelligence agencies, there are few countries that don't practice some
-              form of media manipulation. Some modern examples include the disinformation campaign by Russia during the",
+              domestic, seems to be the exception not the rule. Some modern examples include the disinformation
+              campaign by Russia during the",
               tags$a(href = "https://www.reuters.com/article/us-ukraine-crisis-russia-media-idUSKBN15Q0MG", "annexing of Crimea"),
               "in 2014 and China's use of fake news during the",
               tags$a(href = "https://www.theguardian.com/world/2019/aug/11/hong-kong-china-unrest-beijing-media-response",
@@ -188,7 +173,7 @@ dashboardPage(
               tags$br(), tags$br(),
               tags$img(src = "cencorship.png", width = "50%"),
               tags$br(),
-              "In the infographic on this page we explore the use of disinformation by governments across the world from 2000 to 2020
+              "In the infographic on this page we are able to explore the use of disinformation by governments across the world from 2000 to 2020
               through the", tags$a(href = "https://www.v-dem.net/en/data/data/v-dem-dataset-v111/", "V-Dem Version 11.1 data set."),
               'Varieties of Democracy (V-Dem) is an independent research institute that, in their own words, "provide[s] a
               multidimensional and disaggregated dataset that reflects the complexity of the concept of democracy as a system of rule
@@ -274,14 +259,9 @@ dashboardPage(
           
           box(
             status = "primary",
-            h3("Fake News Detection with Machine Learning"),
-            p("TODO")
-          ),
-          
-          box(
-            status = "primary",
-            h3("Overview of how the model works"),
-            p("To build this machine learning model I employed a TF-IDF Vectorizer and Passive Aggressive Classifier
+            h3("Model overview"),
+            p(tags$img(src = "ml.png", width = "33%", style = "clear: left; float: right"),
+              "To build this machine learning model I employed a TF-IDF Vectorizer and Passive Aggressive Classifier
               from the python package scikit-learn.",
               tags$br(), tags$br(),
               "A TF-IDF Vectorizer takes text as an input and computes the
@@ -295,17 +275,29 @@ dashboardPage(
               prediction is correct the model is not changed. PACs are also aggressive because as they are trained, if the prediction
               is NOT correct it will update and change the model according to some penalizing parameter. A PAC will be trained on the
               given data a certain number of times defined and stops when it reaches a defined stopping criterion associated with the
-              models loss.",
-              tags$br(), tags$br(),
-              "For a much more indepth explaination on how PACs work watch",
-              tags$a(href = "https://www.youtube.com/watch?v=TJU8NfDdqNQ&ab_channel=VictorLavrenko", "this video.")
-              )
+              model's loss."
+              ),
+            h3("The training and testing data"),
+            p("To build a robust training and testing data set for my model I found three Kaggle data sets and
+              the ISOT Fake News data set from the University of Victoria.
+              I compiled all of these data sets into a single, non-redunant data set that comprised 64,845 labled articles of
+              at least 50 words in length from the years 2016 to 2020."
+            ),
+            p(
+              tags$strong("Data Sets:"), tags$br(),
+              tags$a(href = "https://www.kaggle.com/c/fakenewskdd2020", "Kaggle data set #1"), tags$br(),
+              tags$a(href = "https://www.kaggle.com/c/fake-news", "Kaggle data set #2"), tags$br(),
+              tags$a(href = "https://www.kaggle.com/c/classifying-the-fake-news", "Kaggle data set #3"), tags$br(),
+              tags$a(href = "https://www.uvic.ca/engineering/ece/isot/datasets/fake-news/index.php", "ISOT Fake News data set")
+            )
           ),
           
           box(
             status = "primary",
-            h3("The Training and Testing Data"),
-            p("TODO")
+            h3("Model performance"),
+            highchartOutput("accuracy", height = "160px"),
+            tags$br(),
+            highchartOutput("confusion_matrix", height = "400px")
           )
           
         )
@@ -365,27 +357,6 @@ dashboardPage(
                 highchartOutput("results_word_cloud", height = "300px")
               )
             )
-          )
-          
-        )
-      ),
-      
-      ## Model performance
-      tabItem(
-        tabName = "model-performance",
-        fluidRow(
-          
-          box(
-            status = "primary",
-            h3("Testing the Model on a Custom Data Set"),
-            p("TODO")
-          ),
-          
-          box(
-            status = "primary",
-            highchartOutput("accuracy", height = "160px"),
-            tags$br(),
-            highchartOutput("confusion_matrix")
           )
           
         )

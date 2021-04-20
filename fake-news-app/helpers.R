@@ -46,5 +46,6 @@ df_gtrends <- read.csv("gtrends_data.csv")
 df_gtrends <<- df_gtrends %>%
   mutate(date = as.Date(date))
 
-# Retrieve the model testing data
-df_test <- read.csv("model-test-results.csv")
+# Retrieve the model testing and correlation data
+df_test <<- read.csv("model-test-cor.csv")
+df_test_results <<- read.csv("model-test-results.csv")

@@ -4,7 +4,10 @@
 source("helpers.R")
 
 # Set highcharter options
-options(highcharter.theme = hc_theme_smpl(tooltip = list(valueDecimals = 0)))
+options(highcharter.theme = hc_theme_smpl(
+  tooltip = list(valueDecimals = 0),
+  colors = c('#2c3e50', '#18bc9c', '#227D76', '#ACC8E5', '#3993BF')
+))
 
 # Python resources
 virtualenv_create(envname = "python_environment", python= "python3")
@@ -173,6 +176,7 @@ function(input, output) {
   
   ## Model test results
   output$confusion_matrix <- renderHighchart((({
+    cor_colr <- list(list(0, '#DCDFE2'), list(1, '#18bc9c'))
     df_test %>% 
       hchart(
         "heatmap",
@@ -188,7 +192,8 @@ function(input, output) {
       hc_legend(enabled = FALSE) %>% 
       hc_add_theme(hc_theme_smpl(tooltip = list(valueDecimals = 2))) %>% 
       hc_tooltip(pointFormat = '{name}') %>% 
-      hc_title(text = "Confusion matrix")
+      hc_title(text = "Confusion matrix") %>% 
+      hc_colorAxis(stops = cor_colr, min = 0, max = 1)
   })))
   
   output$accuracy <- renderHighchart((({
@@ -204,7 +209,7 @@ function(input, output) {
           x = "Accuracy",
           y = Accuracy
         ),
-        pointWidth = 80,
+        pointWidth = 42,
         height = "200px"
       ) %>% 
       hc_yAxis(
@@ -216,6 +221,10 @@ function(input, output) {
         labels = list(enabled = FALSE)
       ) %>%
       hc_tooltip(pointFormat = '{Accuracy}') %>% 
-      hc_title(text = "Model Accuracy")
+      hc_title(text = "Accuracy")
+  })))
+  
+  output$test_bar_chart <- renderHighchart((({
+    
   })))
 }

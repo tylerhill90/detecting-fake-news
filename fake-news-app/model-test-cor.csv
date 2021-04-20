@@ -1,0 +1,5 @@
+"Prediction","Reference","Freq","name"
+"FAKE","FAKE",0.39,"True Negative"
+"REAL","FAKE",0.04,"False Positive"
+"FAKE","REAL",0.04,"False Negative"
+"REAL","REAL",0.53,"True Positive"

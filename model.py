@@ -57,6 +57,14 @@ def main():
     pickle.dump(tfidf_vec, open(
         "./fake-news-app/tfidf-vectorizer.pickle", "wb"))
 
+    # Save testing results
+    test_df = pd.DataFrame({
+        "label": y_test,
+        "prediction": y_pred
+    })
+
+    test_df.to_csv("./fake-news-app/model-test-results.csv", index=False)
+
 
 if __name__ == "__main__":
     main()
