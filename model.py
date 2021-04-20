@@ -63,7 +63,7 @@ def main():
         "prediction": y_pred
     })
 
-    test_df.to_csv("./fake-news-app/model-test-results.csv", index=False)
+    test_df.to_csv("./data/model-test-results.csv", index=False)
 
 
 if __name__ == "__main__":

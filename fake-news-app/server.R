@@ -182,7 +182,7 @@ function(input, output) {
         "heatmap",
         hcaes(
           x = Prediction,
-          y = Reference,
+          y = Actual,
           value = Freq,
           group = name
         ),

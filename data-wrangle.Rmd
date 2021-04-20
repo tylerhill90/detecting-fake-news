@@ -221,15 +221,16 @@ write.csv(df_gtrends, "./fake-news-app/gtrends_data.csv", row.names = FALSE)
 
 ```{r}
 # Run only after re-training the model in model.py
-df_test <- read.csv("./fake-news-app/model-test-results.csv")
+df_test <- read.csv("./data/model-test-results.csv")
 con_mat <- confusionMatrix(data = factor(df_test$prediction), reference = factor(df_test$label))
 con_mat <- as.data.frame(con_mat$table) %>% 
       mutate(Freq = round(Freq / sum(Freq), 2)) %>%
       mutate(name = ifelse(Prediction == "FAKE" & Reference == "FAKE", "True Negative", NA)) %>% 
       mutate(name = ifelse(Prediction == "REAL" & Reference == "FAKE", "False Positive", name)) %>% 
       mutate(name = ifelse(Prediction == "FAKE" & Reference == "REAL", "False Negative", name)) %>% 
-      mutate(name = ifelse(Prediction == "REAL" & Reference == "REAL", "True Positive", name))
+      mutate(name = ifelse(Prediction == "REAL" & Reference == "REAL", "True Positive", name)) %>% 
+  rename(Actual = Reference)
 # Save to csv
-write.csv(con_mat, "./fake-news-app/model-test-cor.csv", row.names = FALSE)
+write.csv(con_mat, "./fake-news-app/model-test-results.csv", row.names = FALSE)
 ```
 

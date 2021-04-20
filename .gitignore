@@ -4,6 +4,7 @@ data/
 ConceptSketches/
 .RData
 .Rhistory
+*.docx
 *.dcf
 *.zip
 .Rproj.user
