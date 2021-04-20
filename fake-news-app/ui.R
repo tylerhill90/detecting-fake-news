@@ -58,9 +58,9 @@ dashboardPage(
             h3("What is fake news?"),
             p(tags$img(src = "icon.png", width = "33%", style = "align: top; clear:left; float: right"),
               "As you may have already known, fake news is any news that presents itself as truthful
-              when in fact it is false or misleading. There are two major distinctions to be made when discussing this
-              topic and that is the difference between
-              misinformation and disinformation.", tags$strong("Misinformation"), "is false information that
+              when in fact it is false or misleading. There is a major distinctions to be made when discussing this
+              topic, the difference between misinformation and disinformation.",
+              tags$strong("Misinformation"), "is false information that
               is spread regardless of the intent to mislead.", tags$strong("Disinformation"), "is false information
               that is spread WITH the intent to mislead. Put another way, disinformation is when misinformation is
               knowingly disseminated."),
@@ -144,11 +144,11 @@ dashboardPage(
             tags$br(),
             highchartOutput("sm_trust", height = "320px"),
             tags$br(),
-            helpText(p(
+            p(
               "Source:", tags$br(),
               tags$a(href = "https://www.journalism.org/2021/01/12/news-use-across-social-media-platforms-in-2020/",
                      "Pew Research Center - News Use Across Social Media Platforms in 2020")
-            ))
+            )
           )
 
         )
@@ -273,23 +273,23 @@ dashboardPage(
               updates it's model with each new piece of input step by step. It is particualry good at dealing with large
               streams of continuously updating data. PACs are passive because if the
               prediction they make is correct the model is not changed but they are also aggressive because if the prediction
-              is NOT correct it will change the model according to some prediefined penalization parameter. A PAC will be trained on the
+              is NOT correct it will change the model according to some predefined penalization parameter. A PAC will be trained on the
               given data a certain number of predefined times but terminates training when it reaches a predefined stopping criterion associated with the
               model's loss."
               ),
             h3("The training and testing data"),
-            p("To build a robust training and testing data set for the model I found three Kaggle data sets and
-              the ISOT Fake News data set from the University of Victoria.
+            p("To build a robust training and testing data set for the model I found three fake news data sets from Kaggle and
+              one more from the University of Victoria.
               I compiled all of these data sets into a single data set that comprised 64,845 unique articles of
               at least 50 words in length from the years 2016 to 2020. These articles are primarily about political news
-              and thus narrows the scope of this model as such."
+              and thus this model really only produces valid results for articles about politics and the government."
             ),
             p(
               tags$strong("Data Sets:"), tags$br(),
               tags$a(href = "https://www.kaggle.com/c/fakenewskdd2020", "Kaggle data set #1"), tags$br(),
               tags$a(href = "https://www.kaggle.com/c/fake-news", "Kaggle data set #2"), tags$br(),
               tags$a(href = "https://www.kaggle.com/c/classifying-the-fake-news", "Kaggle data set #3"), tags$br(),
-              tags$a(href = "https://www.uvic.ca/engineering/ece/isot/datasets/fake-news/index.php", "ISOT Fake News data set")
+              tags$a(href = "https://www.uvic.ca/engineering/ece/isot/datasets/fake-news/index.php", "University of Victoria data set")
             )
           ),
           
@@ -319,17 +319,15 @@ dashboardPage(
           
           box(
             status = "primary",
+            h3("Enter Article to Detect Here"),
             textAreaInput(
               "article_text",
-              label = h3("Enter Article to Detect Here"),
-              placeholder = "Enter the article's body text here",
+              label = NULL,
+              placeholder = "Copy and paste the article you would like to detect here. Use ctrl + shift + v to paste unformatted text only. Please use a politically focused article and enter just the article's body text for the best results. Results will appear below/to the right.",
               height = "250px"
             ),
             actionButton("run_model", "Detect Fake News", icon = icon("fingerprint")),
-            tags$br(),
-            helpText("Usage:", tags$br(), "Copy and paste the article you would like to detect
-            in the text box above. Use ctrl + shift + v to paste only unformatted text. Please 
-            enter just the article's body for the best results."),
+            tags$br(), tags$br(),
             p(
               tags$strong("Resources for reliable articles:"), tags$br(),
               tags$a(href = "https://www.npr.org/sections/politics/", "NPR - Politics"), tags$br(),

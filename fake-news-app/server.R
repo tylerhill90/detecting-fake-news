@@ -71,7 +71,9 @@ function(input, output) {
         title = list(text = "Percent"),
         max = 100
       ) %>% 
-      hc_legend(reversed = TRUE, align = "center")
+      hc_legend(
+        reversed = TRUE, align = "center", verticalAlign = "top"
+      )
   })))
   
   ## Google Trends Chart
@@ -84,9 +86,11 @@ function(input, output) {
     
     chart_df %>% 
       hchart(
-        name = "Relative Interest"
+        name = "Interest"
       ) %>% 
-        hc_title(text = title_)
+        hc_title(text = title_) %>% 
+      hc_caption(text = "Google trends normalizes their measure of interest, so a score of 100 translates to peak interest.",
+                 align = "center")
   })))
   
   ## World Map - Gov Influence
@@ -113,7 +117,8 @@ function(input, output) {
       hc_mapNavigation(enabled = TRUE) %>% 
       hc_title(text = subtitle) %>% 
       hc_add_theme(hc_theme_smpl(tooltip = list(valueDecimals = 2))) %>%
-      hc_credits(enabled = TRUE, text = "Scale: 0 = Worse to 4 = Best<br>", style = list(fontSize = "12px"))
+      hc_caption(text = "Scale: 0 = Worse to 4 = Best",
+                 align = "right")
   })))
   
   ###########
@@ -171,7 +176,10 @@ function(input, output) {
         ),
         name = "Word Count"
       ) %>% 
-      hc_title(text = "Article Word Cloud")
+      hc_title(text = "Article Word Cloud") %>% 
+      hc_colors('#2c3e50') %>% 
+      hc_caption(text = "Top 20 words from the queried article's term frequency matrix.",
+                 align = "center")
   })))
   
   ## Model test results
