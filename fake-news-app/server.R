@@ -16,6 +16,10 @@ reticulate::use_virtualenv("python_environment", required = TRUE)
 source_python("./predict.py")
 
 function(input, output) {
+  # Hide the loading message when the rest of the server function has executed
+  hide(id = "loading-content", anim = TRUE, animType = "fade")    
+  show("app-content")
+  
   # Inform user how to toggle sidebar menu
   observe({
     shinyalert(
@@ -117,7 +121,7 @@ function(input, output) {
       hc_mapNavigation(enabled = TRUE) %>% 
       hc_title(text = subtitle) %>% 
       hc_add_theme(hc_theme_smpl(tooltip = list(valueDecimals = 2))) %>%
-      hc_caption(text = "Scale: 0 = Worse to 4 = Best",
+      hc_caption(text = "0 = Worse<br>4 = Best",
                  align = "right")
   })))
   
