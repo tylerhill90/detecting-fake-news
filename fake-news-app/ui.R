@@ -180,7 +180,7 @@ dashboardPage(
                 p("Below is a tool for exploring",
                   tags$a(href = "https://trends.google.com/trends/", "Google Trends"),
                   "data for search terms related to fake news and popular conspiracy theories.
-              The data is from 2004 to the present and displays the global interest in the queried term."),
+              The data is from 2004 to the present and displays the normalized global interest in the queried term."),
                 highchartOutput("google_trends"),
                 tags$br(),
                 selectInput(
@@ -255,8 +255,7 @@ dashboardPage(
                 status = "primary",
                 h3("A Government's Role"),
                 p("Fake news has been employed by governments around the world as a tool for swaying public opinion
-              for all of recorded history. For a government to not employ some form of disinformation, foreign or
-              domestic, seems to be the exception and not the rule. Some modern examples include the disinformation
+              for all of recorded history. Some modern examples include the disinformation
               campaign by Russia during the",
                   tags$a(href = "https://www.reuters.com/article/us-ukraine-crisis-russia-media-idUSKBN15Q0MG", "annexing of Crimea"),
                   "in 2014 and China's use of fake news during the",
@@ -363,8 +362,8 @@ dashboardPage(
                   tags$br(), tags$br(),
                   "A Passive Aggressive Classifier (PAC) is a machine learning algorithm that takes input in sequentially and
               updates a prediction model with each new piece of input step by step. It is particualry good at dealing with large
-              streams of continuously updating data, like the 24 hour news cycle. PACs are passive because if the
-              prediction they make is correct the model is not changed but they are also aggressive because if the prediction made
+              streams of continuously updating data, like in the 24 hour news cycle. PACs are passive because if the
+              prediction they make is correct the model is not changed but they are also aggressive because if the prediction
               is NOT correct it will change the model according to some predefined penalization score."
                 ),
                 h3("The training and testing data"),
@@ -372,7 +371,7 @@ dashboardPage(
               one more from the University of Victoria.
               I compiled all of these data sets into a single data set that comprised 64,845 unique articles of
               at least 50 words in length from the years 2016 to 2020. These articles are primarily about political news
-              and thus this model really only produces valid results for articles about politics and the government."
+              and thus this model is best suited for articles about politics and the government."
                 ),
                 p(
                   tags$strong("Data Sets:"), tags$br(),
